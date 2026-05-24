@@ -18,6 +18,10 @@ class LoginData(BaseModel):
 class KeyData(BaseModel):
     user_id: str
 
+class KeyDelData(BaseModel):
+    user_id: str
+    vless_uuid: UUID
+
 class ClientData(BaseModel):
         id: UUID
         alterId: int = 0

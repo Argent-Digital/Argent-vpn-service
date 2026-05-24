@@ -1,7 +1,7 @@
 import httpx
 import uuid
 
-from src.schemas.vless_schema import LoginData, VlessClientInit, KeyData, ClientData, AddClientPayload, InboundSettingsWrap
+from src.schemas.vless_schema import LoginData, VlessClientInit, KeyData, ClientData, AddClientPayload, InboundSettingsWrap, KeyDelData
 
 class VlessPanelClient:
     def __init__(self, panel_data: VlessClientInit):
@@ -48,15 +48,14 @@ class VlessPanelClient:
         email = f"user_{user_data.user_id}"
 
         client_data = ClientData(id=client_uuid, email=email, tgId=user_data.user_id)
-        base = self.ux_url.strip('/')
-        url = f"{base}/panel/api/inbounds/addClient"
+        url = f"/panel/api/inbounds/addClient"
         payload = AddClientPayload(id=self.vless_inbound, settings=InboundSettingsWrap(clients=[client_data]))
 
         try:
-            res = await self.client.post(url=url, data=payload)
+            res = await self.client.post(url=url, json=payload.model_dump())
 
-            if not res:
-                return None, f"None res"
+            if res.status_code != 200:
+                return False
             
             data = res.json()
             if data.get("success"):
@@ -72,3 +71,18 @@ class VlessPanelClient:
         except Exception as e:
             return None, f"Add client error: {e}"
 
+    async def del_client(self, key_data: KeyDelData):
+        url = f"/panel/api/inbounds/{self.vless_inbound}/delClient/{key_data.vless_uuid}"
+
+        try:
+            res = await self.client.post(url)
+
+            if res.status_code != 200:
+                return False
+            
+            body = res.json()
+            return bool(body.get("success"))
+        
+        except Exception as e:
+            print(f"❌ Ошибка в delete_client: {e}")
+            return False
