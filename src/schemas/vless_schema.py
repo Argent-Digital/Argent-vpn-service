@@ -20,7 +20,6 @@ class KeyData(BaseModel):
     user_id: str
 
 class KeyDelData(BaseModel):
-    user_id: str
     vless_uuid: UUID
 
 class ClientData(BaseModel):

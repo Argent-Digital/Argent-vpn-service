@@ -3,12 +3,15 @@ from typing import List
 from uuid import UUID
 
 class NodeData(BaseModel):
+    id: int
     ip: str
 
     ux_username: str | None = None
     ux_pass: str | None = None
     ux_url: str | None = None
     vless_inbound: int | None = None
+    path: str | None = None
+
 
     out_url: str | None = None
     out_cert: str | None = None
