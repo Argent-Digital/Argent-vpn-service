@@ -1,7 +1,7 @@
 import httpx
 import uuid
 
-from src.schemas.vless_schema import LoginData, VlessClientInit, KeyData, ClientData, AddClientPayload, InboundSettingsWrap, KeyDelData
+from src.schemas.vless_schema import LoginData, VlessClientInit, KeyData, ClientData, AddClientPayload, InboundSettingsWrap, KeyDelData, AddKeyReturn
 
 class VlessPanelClient:
     def __init__(self, panel_data: VlessClientInit):
@@ -43,7 +43,7 @@ class VlessPanelClient:
             print(f"Error login on {self.ux_url}: {e}")
             return False
         
-    async def add_client(self, user_data: KeyData):
+    async def add_client(self, user_data: KeyData) -> AddKeyReturn:
         client_uuid = str(uuid.uuid4())
         email = f"user_{user_data.user_id}"
 
@@ -64,9 +64,10 @@ class VlessPanelClient:
                         f"type=ws&encryption=none&path={self.path}&host=&security=none"
                         f"#Argent-speed_{user_data.user_id}"
                     )
-                return vless_link, client_uuid
+                res = AddKeyReturn(key_name=email, access_url=vless_link, vless_uuid=client_uuid)
+                return res
             else:
-                return None, "Panel reject"
+                return None
             
         except Exception as e:
             return None, f"Add client error: {e}"

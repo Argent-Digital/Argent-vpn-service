@@ -9,4 +9,5 @@ class OutlineCreateKey(BaseModel):
 
 class OutlineCreateKeyReturn(BaseModel):
     key_name: str
+    server_key_id: int
     access_url: str

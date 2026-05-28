@@ -68,5 +68,5 @@ class VlessCleaner:
 
             await asyncio.gather(*tasks)
             await vless_client.close()
-            print(f"Vless Node {node_id} successfukky cleaned!")
+            print(f"Vless node {node_id} successfully cleaned!")
             

@@ -23,7 +23,7 @@ class OutlinePanelClient:
 
             await asyncio.to_thread(self.client.rename_key, key_id=key_id, name=key_name)
 
-            res = OutlineCreateKeyReturn(key_name=key_name, access_url=key_url)
+            res = OutlineCreateKeyReturn(key_name=key_name, access_url=key_url, server_key_id=key_id)
             return res
         except Exception as e:
             print(f"Error create key: {e}")

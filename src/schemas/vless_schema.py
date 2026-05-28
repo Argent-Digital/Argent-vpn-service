@@ -19,6 +19,11 @@ class LoginData(BaseModel):
 class KeyData(BaseModel):
     user_id: str
 
+class AddKeyReturn(BaseModel):
+     key_name: str
+     access_url: str
+     vless_uuid: UUID
+
 class KeyDelData(BaseModel):
     vless_uuid: UUID
 
