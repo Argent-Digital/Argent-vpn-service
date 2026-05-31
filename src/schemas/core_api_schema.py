@@ -17,3 +17,16 @@ class CreateKey(BaseModel):
 class CreateKeyClientBody(BaseModel):
     node_data: NodeData
     user_data: CreateKey
+
+class DeleteKeys(BaseModel):
+    user_id: int
+    node_id: int
+    server_key_id: str| None = None
+    protocol: str
+    vless_uuid: UUID | None = None
+
+    model_config=ConfigDict(from_attributes=True)
+
+class DelKeyData(BaseModel):
+    node_data: NodeData
+    key_data: DeleteKeys

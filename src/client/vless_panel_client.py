@@ -72,7 +72,7 @@ class VlessPanelClient:
         except Exception as e:
             return None, f"Add client error: {e}"
 
-    async def del_client(self, key_data: KeyDelData):
+    async def del_client(self, key_data: KeyDelData) -> bool:
         url = f"/panel/api/inbounds/{self.vless_inbound}/delClient/{key_data.vless_uuid}"
 
         try:
