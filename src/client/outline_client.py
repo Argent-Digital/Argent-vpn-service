@@ -7,7 +7,7 @@ class OutlinePanelClient:
         try:
             self.client = OutlineVPN(api_url=session_data.out_url, cert_sha256=session_data.out_cert)
         except Exception as e:
-            print(f"Error onit Outline client: {e}")
+            print(f"Error init Outline client: {e}")
             self.client = None
 
     async def outline_create_key(self, data: OutlineCreateKey) -> OutlineCreateKeyReturn:

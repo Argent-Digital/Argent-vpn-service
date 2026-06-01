@@ -28,6 +28,10 @@ class VlessCleaner:
             outline_client = OutlinePanelClient()
             login_data = OutlineLoginData(out_url=node_config.out_url, out_cert=node_config.out_cert)
             outline_client.login(session_data=login_data)
+
+            if not outline_client.client:
+                print(f"skip outline node {node_id}")
+                continue
             
             print(f"Starting cleaning key outline on node {node_id}, keys: {len(keys_list)}")
 
