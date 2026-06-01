@@ -1,8 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from src.auth.dependencies import get_current_user_id
+from src.auth.verify_system_token import veify_system_token
+from src.services.billing_cleaner import Cleaner
 from src.schemas.core_api_schema import CreateKeyClientBody, DelKeyData, VpnReturnData
 from src.schemas.vless_schema import VlessClientInit, KeyDelData, KeyData, AddKeyReturn
 from src.schemas.outline_schema import OutlineLoginData, OutlineCreateKey
+from src.schemas.billing_schema import DelKeysData
 from src.client.vless_panel_client import VlessPanelClient
 from src.client.outline_client import OutlinePanelClient
 
@@ -81,3 +84,12 @@ async def del_key(key_data: DelKeyData, user_id: int = Depends(get_current_user_
             raise HTTPException(status_code=500, detail="don't del key")
 
     return {"status": "ok"}
+
+@router.post("/vpn/cleaning_keys")
+async def billing_cleaning(del_data: DelKeysData, system_id: int = Depends(veify_system_token)):
+    try:
+        await Cleaner.billing_del(billing_data=del_data)
+        return {"status": "ok"}
+    except Exception as e:
+        print(f"route error: {e}")
+        raise HTTPException(status_code=500, detail=f"cleaner don't correct worked: {e}")

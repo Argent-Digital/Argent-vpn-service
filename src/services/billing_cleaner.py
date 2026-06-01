@@ -6,7 +6,7 @@ from src.schemas.outline_schema import OutlineLoginData
 from src.schemas.vless_schema import VlessClientInit, KeyDelData
 from collections import defaultdict
 
-class VlessCleaner:
+class Cleaner:
     async def billing_del(self, billing_data: DelKeysData):
         vless_keys = defaultdict(list)
         outline_keys = defaultdict(list)
