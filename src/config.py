@@ -5,8 +5,6 @@ class Settings(BaseSettings):
     ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
 
-    VPN_SERVICE_URL: str
-
     model_config = SettingsConfigDict(env_file=".env")
 
 settings = Settings()
