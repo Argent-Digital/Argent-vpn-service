@@ -11,7 +11,7 @@ from src.client.outline_client import OutlinePanelClient
 
 router = APIRouter(prefix="/vpn", tags=["core api"])
 
-@router.post("/vpn/create_key", response_model=VpnReturnData)
+@router.post("/create_key", response_model=VpnReturnData)
 async def create_key(key_data: CreateKeyClientBody, user_id: int = Depends(get_current_user_id)):
     if key_data.user_data.protocol == "vless":
         node_data = VlessClientInit(
@@ -52,7 +52,7 @@ async def create_key(key_data: CreateKeyClientBody, user_id: int = Depends(get_c
         
     return res
 
-@router.post("/vpn/del_key")
+@router.post("/del_key")
 async def del_key(key_data: DelKeyData, user_id: int = Depends(get_current_user_id)):
     if key_data.key_data.protocol == "vless":
         node_data = VlessClientInit(
@@ -85,7 +85,7 @@ async def del_key(key_data: DelKeyData, user_id: int = Depends(get_current_user_
 
     return {"status": "ok"}
 
-@router.post("/vpn/cleaning_keys")
+@router.post("/cleaning_keys")
 async def billing_cleaning(del_data: DelKeysData, system_id: int = Depends(veify_system_token)):
     try:
         await Cleaner.billing_del(billing_data=del_data)
