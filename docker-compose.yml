@@ -1,0 +1,17 @@
+services:
+  argent-vpn-service:
+    build: .
+    ports:
+      - "8003:8000"
+    volumes:
+      - .:/app
+    restart: always
+
+    command: >
+      sh -c "export PYTHONPATH=/app && python -m src.main" 
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
