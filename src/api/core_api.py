@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException
 from src.auth.dependencies import get_current_user_id
 from src.auth.verify_system_token import veify_system_token
 from src.services.billing_cleaner import Cleaner
 from src.schemas.core_api_schema import CreateKeyClientBody, DelKeyData, VpnReturnData
-from src.schemas.vless_schema import VlessClientInit, KeyDelData, KeyData, AddKeyReturn
+from src.schemas.vless_schema import VlessClientInit, KeyDelData, KeyData
 from src.schemas.outline_schema import OutlineLoginData, OutlineCreateKey
 from src.schemas.billing_schema import DelKeysData
 from src.client.vless_panel_client import VlessPanelClient
@@ -19,6 +19,7 @@ async def create_key(key_data: CreateKeyClientBody, user_id: int = Depends(get_c
             ux_pass=key_data.node_data.ux_pass,
             ux_username=key_data.node_data.ux_username,
             vless_inbound=key_data.node_data.vless_inbound,
+            port=key_data.node_data.inbound_port,
             ip=key_data.node_data.ip,
             path=key_data.node_data.path,
         )

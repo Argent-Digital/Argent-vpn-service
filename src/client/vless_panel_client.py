@@ -11,7 +11,7 @@ class VlessPanelClient:
         self.vless_inbound = panel_data.vless_inbound
         self.ip = panel_data.ip
         self.path = panel_data.path
-        self.port = 10000
+        self.port = panel_data.port
 
         self.client = httpx.AsyncClient(
             base_url=self.ux_url,

@@ -56,6 +56,7 @@ class Cleaner:
                 ux_pass=node_config.ux_pass,
                 ux_url=node_config.ux_url,
                 vless_inbound=node_config.vless_inbound,
+                port=node_config.inbound_port,
                 ip=node_config.ip,
                 path=node_config.path
             )

@@ -9,6 +9,7 @@ class VlessClientInit(BaseModel):
     ux_pass: str
     ux_url: str
     vless_inbound: int
+    port: int
     ip: str
     path: str | None
 
@@ -17,7 +18,7 @@ class LoginData(BaseModel):
     password: str
 
 class KeyData(BaseModel):
-    user_id: str
+    user_id: int
 
 class AddKeyReturn(BaseModel):
      key_name: str
