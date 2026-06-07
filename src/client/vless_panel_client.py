@@ -1,5 +1,6 @@
 import httpx
 import uuid
+import json
 
 from src.schemas.vless_schema import LoginData, VlessClientInit, KeyData, ClientData, AddClientPayload, InboundSettingsWrap, KeyDelData, AddKeyReturn
 
@@ -16,6 +17,7 @@ class VlessPanelClient:
         self.client = httpx.AsyncClient(
             base_url=self.ux_url,
             verify=False,
+            cookies=httpx.Cookies(),
             timeout=httpx.Timeout(10.0, connect=5.0)
         )
 
@@ -52,7 +54,7 @@ class VlessPanelClient:
         payload = AddClientPayload(id=self.vless_inbound, settings=InboundSettingsWrap(clients=[client_data]))
 
         try:
-            res = await self.client.post(url=url, json=payload.model_dump())
+            res = await self.client.post(url=url, data=payload.model_dump())
 
             if res.status_code != 200:
                 return False
@@ -70,7 +72,7 @@ class VlessPanelClient:
                 return None
             
         except Exception as e:
-            return None, f"Add client error: {e}"
+            return None
 
     async def del_client(self, key_data: KeyDelData) -> bool:
         url = f"/panel/api/inbounds/{self.vless_inbound}/delClient/{key_data.vless_uuid}"
