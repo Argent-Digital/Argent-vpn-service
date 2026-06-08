@@ -61,6 +61,7 @@ async def del_key(key_data: DelKeyData, user_id: int = Depends(get_current_user_
             ux_pass=key_data.node_data.ux_pass,
             ux_username=key_data.node_data.ux_username,
             vless_inbound=key_data.node_data.vless_inbound,
+            port=key_data.node_data.inbound_port,
             ip=key_data.node_data.ip,
             path=key_data.node_data.path,
         )
