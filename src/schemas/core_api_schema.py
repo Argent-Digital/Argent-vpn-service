@@ -3,10 +3,10 @@ from uuid import UUID
 from src.schemas.billing_schema import NodeData
 
 class VpnReturnData(BaseModel):
-    server_key_id: str | None
+    server_key_id: str | None = None
     key_name: str
     access_url: str
-    vless_uuid: UUID | None
+    vless_uuid: UUID | None = None
 
 class CreateKey(BaseModel):
     user_id: int

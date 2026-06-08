@@ -29,7 +29,7 @@ class KeyDelData(BaseModel):
     vless_uuid: UUID
 
 class ClientData(BaseModel):
-        id: UUID
+        id: str
         alterId: int = 0
         email: str
         limitIp: int = 10
