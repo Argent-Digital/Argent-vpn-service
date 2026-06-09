@@ -34,7 +34,8 @@ class OutlinePanelClient:
             print("❌ Error: Outline client is not initialized")
             return False
         try:
-            success = await asyncio.to_thread(self.client.delete_key, server_key_id)
+            key_data = int(server_key_id)
+            success = await asyncio.to_thread(self.client.delete_key, key_data)
             return success
         except Exception as e:
             print(f"Error can't del key: {e}")
