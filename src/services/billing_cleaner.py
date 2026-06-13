@@ -13,10 +13,10 @@ class Cleaner:
 
         for key in billing_data.keys_list:
             if key.protocol.lower() == "vless":
-                vless_keys[key.node_id].append(key)
+                vless_keys[key.nodes_id].append(key)
 
             elif key.protocol.lower() == "outline":
-                outline_keys[key.node_id].append(key)
+                outline_keys[key.nodes_id].append(key)
 
         for node_id, keys_list in outline_keys.items():
             node_config = next((n for n in billing_data.nodes_list if n.id == node_id), None)

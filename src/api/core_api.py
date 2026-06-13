@@ -90,7 +90,7 @@ async def del_key(key_data: DelKeyData, user_id: int = Depends(get_current_user_
 @router.post("/cleaning_keys")
 async def billing_cleaning(del_data: DelKeysData, system_id: int = Depends(veify_system_token)):
     try:
-        await Cleaner.billing_del(billing_data=del_data)
+        await Cleaner().billing_del(billing_data=del_data)
         return {"status": "ok"}
     except Exception as e:
         print(f"route error: {e}")
