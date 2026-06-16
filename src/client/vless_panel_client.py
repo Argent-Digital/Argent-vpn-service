@@ -13,6 +13,8 @@ class VlessPanelClient:
         self.ip = panel_data.ip
         self.path = panel_data.path
         self.port = panel_data.port
+        self.reality_public_key = panel_data.reality_public_key
+        self.reality_short_id = panel_data.reality_short_id
 
         self.client = httpx.AsyncClient(
             base_url=self.ux_url,
@@ -63,10 +65,15 @@ class VlessPanelClient:
             data = res.json()
             if data.get("success"):
                 vless_link = (
-                        f"vless://{client_uuid}@{self.ip}:{self.port}?"
-                        f"type=ws&encryption=none&path={self.path}&host=&security=none"
-                        f"#Argent-speed_{user_data.user_id}"
-                    )
+                    f"vless://{client_uuid}@{self.ip}:{self.port}?"
+                    f"type=tcp&"
+                    f"security=reality&"
+                    f"pbk={self.reality_public_key}&" 
+                    f"fp=firefox&"                      
+                    f"sni=www.amd.com&"          
+                    f"sid={self.reality_short_id}"      
+                    f"#Argent-speed_{user_data.user_id}"
+                )
                 res = AddKeyReturn(key_name=email, access_url=vless_link, vless_uuid=client_uuid)
                 return res
             else:

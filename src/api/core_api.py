@@ -64,6 +64,8 @@ async def del_key(key_data: DelKeyData, user_id: int = Depends(get_current_user_
             port=key_data.node_data.inbound_port,
             ip=key_data.node_data.ip,
             path=key_data.node_data.path,
+            reality_public_key = key_data.node_data.reality_public_key,
+            reality_short_id = key_data.node_data.reality_short_id,
         )
         vless_client = VlessPanelClient(panel_data=node_data)
         await vless_client.login()

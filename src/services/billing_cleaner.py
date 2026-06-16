@@ -58,7 +58,9 @@ class Cleaner:
                 vless_inbound=node_config.vless_inbound,
                 port=node_config.inbound_port,
                 ip=node_config.ip,
-                path=node_config.path
+                path=node_config.path,
+                reality_public_key = node_config.reality_public_key,
+                reality_short_id = node_config.reality_short_id,
             )
             vless_client = VlessPanelClient(panel_data=vless_init_data)
             await vless_client.login()

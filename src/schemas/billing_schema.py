@@ -12,6 +12,8 @@ class NodeData(BaseModel):
     vless_inbound: int | None = None
     inbound_port: int | None = None
     path: str | None = None
+    reality_public_key: str | None = None
+    reality_short_id: str | None = None
 
 
     out_url: str | None = None

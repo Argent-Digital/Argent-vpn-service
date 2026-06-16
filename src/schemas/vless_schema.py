@@ -11,7 +11,9 @@ class VlessClientInit(BaseModel):
     vless_inbound: int
     port: int
     ip: str
-    path: str | None
+    path: str | None = None
+    reality_public_key: str
+    reality_short_id: str
 
 class LoginData(BaseModel):
     username: str
