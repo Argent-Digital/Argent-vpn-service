@@ -72,7 +72,7 @@ class VlessPanelClient:
                     f"fp=firefox&"                      
                     f"sni=www.amd.com&"          
                     f"sid={self.reality_short_id}"      
-                    f"#Argent-speed_{user_data.user_id}"
+                    f"#Argent-GO_{user_data.user_id}"
                 )
                 res = AddKeyReturn(key_name=email, access_url=vless_link, vless_uuid=client_uuid)
                 return res
