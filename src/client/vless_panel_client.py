@@ -1,8 +1,18 @@
-import httpx
 import uuid
-import json
 
-from src.schemas.vless_schema import LoginData, VlessClientInit, KeyData, ClientData, AddClientPayload, InboundSettingsWrap, KeyDelData, AddKeyReturn
+import httpx
+
+from src.schemas.vless_schema import (
+    AddClientPayload,
+    AddKeyReturn,
+    ClientData,
+    InboundSettingsWrap,
+    KeyData,
+    KeyDelData,
+    LoginData,
+    VlessClientInit,
+)
+
 
 class VlessPanelClient:
     def __init__(self, panel_data: VlessClientInit):
@@ -25,7 +35,7 @@ class VlessPanelClient:
 
     async def close(self):
         await self.client.aclose()
-        
+
     async def login(self) -> bool:
         try:
             url = "/login"
@@ -35,24 +45,24 @@ class VlessPanelClient:
                     "Content-Type": "application/x-www-form-urlencoded",
                     "Referer": f"{self.ux_url}/"
                 }
-            
+
             response = await self.client.post(url, data=data.model_dump(), headers=headers)
 
             if response.status_code == 200:
                 res_json = response.json()
                 return res_json.get("success", False)
-            
+
             return False
         except Exception as e:
             print(f"Error login on {self.ux_url}: {e}")
             return False
-        
+
     async def add_client(self, user_data: KeyData) -> AddKeyReturn:
         client_uuid = str(uuid.uuid4())
         email = f"user_{user_data.user_id}"
 
         client_data = ClientData(id=client_uuid, email=email, tgId=user_data.user_id)
-        url = f"/panel/api/inbounds/addClient"
+        url = "/panel/api/inbounds/addClient"
         payload = AddClientPayload(id=self.vless_inbound, settings=InboundSettingsWrap(clients=[client_data]))
 
         try:
@@ -61,17 +71,17 @@ class VlessPanelClient:
             if res.status_code != 200:
                 print(f"panel error: {res.text}")
                 return None
-            
+
             data = res.json()
             if data.get("success"):
                 vless_link = (
                     f"vless://{client_uuid}@{self.ip}:{self.port}?"
                     f"type=tcp&"
                     f"security=reality&"
-                    f"pbk={self.reality_public_key}&" 
-                    f"fp=firefox&"                      
-                    f"sni=www.amd.com&"          
-                    f"sid={self.reality_short_id}"      
+                    f"pbk={self.reality_public_key}&"
+                    f"fp=firefox&"
+                    f"sni=www.amd.com&"
+                    f"sid={self.reality_short_id}"
                     f"#Argent-GO_{user_data.user_id}"
                 )
                 res = AddKeyReturn(key_name=email, access_url=vless_link, vless_uuid=client_uuid)
@@ -79,7 +89,7 @@ class VlessPanelClient:
             else:
                 print(f"panel return False: {data.get('msg')}")
                 return None
-            
+
         except Exception as e:
             print(f"Critical error in add client: {e}")
             return None
@@ -92,10 +102,10 @@ class VlessPanelClient:
 
             if res.status_code != 200:
                 return False
-            
+
             body = res.json()
             return bool(body.get("success"))
-        
+
         except Exception as e:
             print(f"❌ Ошибка в delete_client: {e}")
             return False

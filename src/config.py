@@ -1,5 +1,6 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+
 class Settings(BaseSettings):
     SECRET_KEY_FOR_JWT: str
     ALGORITHM: str

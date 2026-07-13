@@ -1,13 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException
+
 from src.auth.dependencies import get_current_user_id
 from src.auth.verify_system_token import veify_system_token
-from src.services.billing_cleaner import Cleaner
-from src.schemas.core_api_schema import CreateKeyClientBody, DelKeyData, VpnReturnData
-from src.schemas.vless_schema import VlessClientInit, KeyDelData, KeyData
-from src.schemas.outline_schema import OutlineLoginData, OutlineCreateKey
-from src.schemas.billing_schema import DelKeysData
-from src.client.vless_panel_client import VlessPanelClient
 from src.client.outline_client import OutlinePanelClient
+from src.client.vless_panel_client import VlessPanelClient
+from src.schemas.billing_schema import DelKeysData
+from src.schemas.core_api_schema import CreateKeyClientBody, DelKeyData, VpnReturnData
+from src.schemas.outline_schema import OutlineCreateKey, OutlineLoginData
+from src.schemas.vless_schema import KeyData, KeyDelData, VlessClientInit
+from src.services.billing_cleaner import Cleaner
 
 router = APIRouter(prefix="/vpn", tags=["core api"])
 
@@ -48,11 +49,11 @@ async def create_key(key_data: CreateKeyClientBody, user_id: int = Depends(get_c
         key_out = await outline_client.outline_create_key(data=create_key_data)
         if not key_out:
             raise HTTPException(status_code=500, detail="Don't create key")
-        
+
         res = VpnReturnData(key_name=key_out.key_name,
                             access_url=key_out.access_url,
                             server_key_id=key_out.server_key_id)
-        
+
     return res
 
 @router.post("/del_key")
@@ -72,10 +73,10 @@ async def del_key(key_data: DelKeyData, user_id: int = Depends(get_current_user_
         vless_client = VlessPanelClient(panel_data=node_data)
         await vless_client.login()
         key_del_data = KeyDelData(vless_uuid=key_data.key_data.vless_uuid)
-        
+
         try:
             res = await vless_client.del_client(key_data=key_del_data)
-            if res == False:
+            if not res:
                 raise HTTPException(status_code=500, detail="don't del key")
         finally:
             await vless_client.close()
@@ -86,7 +87,7 @@ async def del_key(key_data: DelKeyData, user_id: int = Depends(get_current_user_
 
         outline_client.login(session_data=node_data)
         res = await outline_client.outline_del_key(server_key_id=key_data.key_data.server_key_id)
-        if res == False:
+        if not res:
             raise HTTPException(status_code=500, detail="don't del key")
 
     return {"status": "ok"}
@@ -98,4 +99,4 @@ async def billing_cleaning(del_data: DelKeysData, system_id: int = Depends(veify
         return {"status": "ok"}
     except Exception as e:
         print(f"route error: {e}")
-        raise HTTPException(status_code=500, detail=f"cleaner don't correct worked: {e}")
+        raise HTTPException(status_code=500, detail=f"cleaner don't correct worked: {e}") from e

@@ -1,6 +1,7 @@
-from pydantic import BaseModel, ConfigDict
-from typing import List
 from uuid import UUID
+
+from pydantic import BaseModel, ConfigDict
+
 
 class NodeData(BaseModel):
     id: int
@@ -31,5 +32,5 @@ class DeleteKeys(BaseModel):
     model_config=ConfigDict(from_attributes=True)
 
 class DelKeysData(BaseModel):
-    nodes_list: List[NodeData]
-    keys_list: List[DeleteKeys]
+    nodes_list: list[NodeData]
+    keys_list: list[DeleteKeys]

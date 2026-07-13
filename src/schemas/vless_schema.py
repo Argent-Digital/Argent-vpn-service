@@ -1,7 +1,7 @@
-from pydantic import BaseModel, Field, model_serializer, ConfigDict
 import json
 from uuid import UUID
-from typing import List
+
+from pydantic import BaseModel, model_serializer
 
 
 class VlessClientInit(BaseModel):
@@ -54,4 +54,4 @@ class AddClientPayload(BaseModel):
             "id": self.id,
             "settings": json.dumps(self.settings.model_dump()),
         }
-    
+

@@ -1,6 +1,9 @@
 import asyncio
+
 from outline_vpn.outline_vpn import OutlineVPN
-from src.schemas.outline_schema import OutlineLoginData, OutlineCreateKey, OutlineCreateKeyReturn
+
+from src.schemas.outline_schema import OutlineCreateKey, OutlineCreateKeyReturn, OutlineLoginData
+
 
 class OutlinePanelClient:
     def login(self, session_data: OutlineLoginData):

@@ -1,6 +1,9 @@
-from pydantic import BaseModel, ConfigDict
 from uuid import UUID
+
+from pydantic import BaseModel, ConfigDict
+
 from src.schemas.billing_schema import NodeData
+
 
 class VpnReturnData(BaseModel):
     server_key_id: str | None = None

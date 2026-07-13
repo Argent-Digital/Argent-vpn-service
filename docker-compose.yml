@@ -3,13 +3,10 @@ services:
     build: .
     ports:
       - "8003:8000"
-    volumes:
-      - .:/app
     restart: always
-
-    command: >
-      sh -c "export PYTHONPATH=/app && python -m src.main" 
-
+    env_file: .env
+    environment:
+      - PYTHONPATH=/app
     logging:
       driver: "json-file"
       options:

@@ -1,10 +1,12 @@
 import asyncio
-from src.client.vless_panel_client import VlessPanelClient
-from src.client.outline_client import OutlinePanelClient
-from src.schemas.billing_schema import DelKeysData, DeleteKeys
-from src.schemas.outline_schema import OutlineLoginData
-from src.schemas.vless_schema import VlessClientInit, KeyDelData
 from collections import defaultdict
+
+from src.client.outline_client import OutlinePanelClient
+from src.client.vless_panel_client import VlessPanelClient
+from src.schemas.billing_schema import DeleteKeys, DelKeysData
+from src.schemas.outline_schema import OutlineLoginData
+from src.schemas.vless_schema import KeyDelData, VlessClientInit
+
 
 class Cleaner:
     async def billing_del(self, billing_data: DelKeysData):
@@ -32,7 +34,7 @@ class Cleaner:
             if not outline_client.client:
                 print(f"skip outline node {node_id}")
                 continue
-            
+
             print(f"Starting cleaning key outline on node {node_id}, keys: {len(keys_list)}")
 
             tasks = []
@@ -50,7 +52,7 @@ class Cleaner:
             if not node_config:
                 print(f"Error, not search Vless config: {node_id}")
                 continue
-            
+
             vless_init_data = VlessClientInit(
                 ux_username=node_config.ux_username,
                 ux_pass=node_config.ux_pass,
@@ -76,4 +78,4 @@ class Cleaner:
             await asyncio.gather(*tasks)
             await vless_client.close()
             print(f"Vless node {node_id} successfully cleaned!")
-            
+

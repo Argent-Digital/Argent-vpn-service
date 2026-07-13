@@ -1,6 +1,7 @@
+from typing import Annotated
+
 from pydantic import BaseModel
 from pydantic.functional_validators import BeforeValidator
-from typing import Annotated
 
 server_key_id = Annotated[str, BeforeValidator(lambda v: str(v) if v is not None else v)]
 
