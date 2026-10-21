@@ -112,17 +112,21 @@ class VlessPanelClient:
             return None
 
     async def del_client(self, key_data: KeyDelData) -> bool:
-        url = f"/panel/api/inbounds/{self.vless_inbound}/delClient/{key_data.vless_uuid}"
+        deleted_any = False
 
         try:
-            res = await self.client.post(url)
+            for inbound_id in [1, 2, 3]:
+                url = f"panel/api/inbounds/{inbound_id}/delClient/{key_data.vless_uuid}"
+                res = await self.client.post(url)
+                print(f"🗑️ [DEL_CLIENT] inbound={inbound_id} | status={res.status_code} | body={res.text}")
 
-            if res.status_code != 200:
-                return False
+                if res.status_code == 200:
+                    body = res.json()
+                    if body.get("success"):
+                        deleted_any = True
 
-            body = res.json()
-            return bool(body.get("success"))
+            return deleted_any
 
         except Exception as e:
-            print(f"❌ Ошибка в delete_client: {e}")
+            print(f"❌ Ошибка в del_client: {e}")
             return False
