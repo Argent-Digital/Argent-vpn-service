@@ -65,36 +65,47 @@ class VlessPanelClient:
             print(f"❌ Error login on {self.ux_url}: {e}")
             return False
 
-    async def add_client(self, user_data: KeyData) -> AddKeyReturn:
+    async def add_client(self, user_data: KeyData) -> AddKeyReturn | None:
         client_uuid = str(uuid.uuid4())
-        email = f"user_{user_data.user_id}"
+        short_id = client_uuid[:4]
+        email = f"user_{user_data.user_id}_{short_id}"
+        sub_id = f"argent_{user_data.user_id}_{short_id}"
 
-        client_data = ClientData(id=client_uuid, email=email, tgId=user_data.user_id)
-        url = "/panel/api/inbounds/addClient"
-        payload = AddClientPayload(id=self.vless_inbound, settings=InboundSettingsWrap(clients=[client_data]))
+        url = "panel/api/clients/add"
+
+        payload = {
+            "id": client_uuid,
+            "email": email,
+            "tgId": int(user_data.user_id),
+            "subId": sub_id,
+            "enable": True,
+            "limitIp": 0,
+            "totalGB": 0,
+            "expiryTime": 0,
+            "inboundIds": [1, 2, 3],
+        }
 
         try:
-            res = await self.client.post(url=url, json=payload.model_dump(mode="json"))
+            res = await self.client.post(url=url, json=payload)
+            print(f"🔍 [ADD_CLIENT] url={res.request.url} | status={res.status_code} | body={res.text}")
 
             if res.status_code != 200:
-                print(f"panel error: {res.text}")
                 return None
 
             data = res.json()
             if data.get("success"):
-                vless_link = (
-                        f"vless://{client_uuid}@{self.ip}:{self.port}?"
-                        f"type=ws&encryption=none&path={self.path}&host=&security=none"
-                        f"#Argent-speed_{user_data.user_id}"
+                sub_link = f"http://{self.ip}:2096/sub/{sub_id}"
+                return AddKeyReturn(
+                    key_name=email,
+                    access_url=sub_link,
+                    vless_uuid=client_uuid,
                 )
-                res = AddKeyReturn(key_name=email, access_url=vless_link, vless_uuid=client_uuid)
-                return res
             else:
-                print(f"panel return False: {data.get('msg')}")
+                print(f"❌ Panel returned False: {data.get('msg')}")
                 return None
 
         except Exception as e:
-            print(f"Critical error in add client: {e}")
+            print(f"🔥 Critical error in add_client: {e}")
             return None
 
     async def del_client(self, key_data: KeyDelData) -> bool:
