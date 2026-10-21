@@ -71,7 +71,7 @@ class Cleaner:
             for key in keys_list:
                 key: DeleteKeys
                 if key.vless_uuid:
-                    key_data = KeyDelData(vless_uuid=key.vless_uuid)
+                    key_data = KeyDelData(vless_uuid=key.vless_uuid, user_id=key.user_id)
                     task = vless_client.del_client(key_data=key_data)
                     tasks.append(task)
 
