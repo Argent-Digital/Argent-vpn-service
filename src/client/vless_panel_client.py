@@ -74,14 +74,17 @@ class VlessPanelClient:
         url = "panel/api/clients/add"
 
         payload = {
-            "id": client_uuid,
-            "email": email,
-            "tgId": int(user_data.user_id),
-            "subId": sub_id,
-            "enable": True,
-            "limitIp": 0,
-            "totalGB": 0,
-            "expiryTime": 0,
+            "client": {
+                "id": client_uuid,
+                "email": email,
+                "subId": sub_id,
+                "totalGB": 0,
+                "expiryTime": 0,
+                "tgId": int(user_data.user_id),
+                "limitIp": 0,
+                "limitHwid": 0,
+                "enable": True,
+            },
             "inboundIds": [1, 2, 3],
         }
 
