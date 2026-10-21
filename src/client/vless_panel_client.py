@@ -111,7 +111,7 @@ class VlessPanelClient:
             print(f"🔥 Critical error in add_client: {e}")
             return None
 
-async def del_client(self, key_data: KeyDelData) -> bool:
+    async def del_client(self, key_data: KeyDelData) -> bool:
         short_id = str(key_data.vless_uuid)[:4]
         emails_to_try = [
             f"user_{key_data.user_id}_{short_id}",
