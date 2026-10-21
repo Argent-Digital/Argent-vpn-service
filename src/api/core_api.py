@@ -72,7 +72,7 @@ async def del_key(key_data: DelKeyData, user_id: int = Depends(get_current_user_
         )
         vless_client = VlessPanelClient(panel_data=node_data)
         await vless_client.login()
-        key_del_data = KeyDelData(vless_uuid=key_data.key_data.vless_uuid)
+        key_del_data = KeyDelData(vless_uuid=key_data.key_data.vless_uuid, user_id=key_data.key_data.user_id)
 
         try:
             res = await vless_client.del_client(key_data=key_del_data)

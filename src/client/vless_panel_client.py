@@ -111,21 +111,23 @@ class VlessPanelClient:
             print(f"🔥 Critical error in add_client: {e}")
             return None
 
-    async def del_client(self, key_data: KeyDelData) -> bool:
-        deleted_any = False
+async def del_client(self, key_data: KeyDelData) -> bool:
+        short_id = str(key_data.vless_uuid)[:4]
+        emails_to_try = [
+            f"user_{key_data.user_id}_{short_id}",
+            f"user_{key_data.user_id}"
+        ]
 
         try:
-            for inbound_id in [1, 2, 3]:
-                url = f"panel/api/inbounds/{inbound_id}/delClient/{key_data.vless_uuid}"
-                res = await self.client.post(url)
-                print(f"🗑️ [DEL_CLIENT] inbound={inbound_id} | status={res.status_code} | body={res.text}")
+            for email in emails_to_try:
+                url = f"panel/api/clients/del/{email}"
+                res = await self.client.post(url, params={"keepTraffic": 0})
+                print(f"🗑️ [DEL_CLIENT] try email={email} | status={res.status_code} | body={res.text}")
 
-                if res.status_code == 200:
-                    body = res.json()
-                    if body.get("success"):
-                        deleted_any = True
+                if res.status_code == 200 and res.json().get("success"):
+                    return True
 
-            return deleted_any
+            return False
 
         except Exception as e:
             print(f"❌ Ошибка в del_client: {e}")

@@ -29,6 +29,7 @@ class AddKeyReturn(BaseModel):
 
 class KeyDelData(BaseModel):
     vless_uuid: UUID
+    user_id: int
 
 class ClientData(BaseModel):
         id: str
