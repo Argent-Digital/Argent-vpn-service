@@ -3,10 +3,7 @@ import uuid
 import httpx
 
 from src.schemas.vless_schema import (
-    AddClientPayload,
     AddKeyReturn,
-    ClientData,
-    InboundSettingsWrap,
     KeyData,
     KeyDelData,
     LoginData,
@@ -76,6 +73,7 @@ class VlessPanelClient:
         payload = {
             "client": {
                 "id": client_uuid,
+                "auth": client_uuid,
                 "email": email,
                 "subId": sub_id,
                 "totalGB": 0,
@@ -85,7 +83,7 @@ class VlessPanelClient:
                 "limitHwid": 0,
                 "enable": True,
             },
-            "inboundIds": [1, 2, 3],
+            "inboundIds": [1, 2, 3, 4, 5, 6],
         }
 
         try:
@@ -97,7 +95,7 @@ class VlessPanelClient:
 
             data = res.json()
             if data.get("success"):
-                sub_link = f"http://{self.ip}:2096/sub/{sub_id}"
+                sub_link = f"https://key.argentvpn.ru/sub/{sub_id}"
                 return AddKeyReturn(
                     key_name=email,
                     access_url=sub_link,
@@ -115,8 +113,10 @@ class VlessPanelClient:
         short_id = str(key_data.vless_uuid)[:4]
         emails_to_try = [
             f"user_{key_data.user_id}_{short_id}",
-            f"user_{key_data.user_id}"
+            f"user_{key_data.user_id}",
         ]
+        if getattr(key_data, "key_name", None) and key_data.key_name not in emails_to_try:
+            emails_to_try.insert(0, key_data.key_name)
 
         try:
             for email in emails_to_try:
