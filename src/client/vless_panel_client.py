@@ -83,7 +83,7 @@ class VlessPanelClient:
                 "limitHwid": 0,
                 "enable": True,
             },
-            "inboundIds": [1, 2, 3, 4, 5, 6],
+            "inboundIds": [1,],
         }
 
         try:
